@@ -4,7 +4,7 @@ const int BOARD_SIZE = 5;
 HWND hwndButton[BOARD_SIZE][BOARD_SIZE];
 char board[BOARD_SIZE][BOARD_SIZE] = { 0 };
 bool playerTurn = true; // Flag indicating player's turn
-bool againstComputer = false; // Flag indicating the game mode (against computer or player)
+bool againstComputer = true; // Flag indicating the game mode (against computer or player)
 
 
 bool CheckWin(char player) {
@@ -95,24 +95,39 @@ void MakeComputerMove() {
     int bestScore = INT_MIN;
     int bestRow = -1;
     int bestCol = -1;
-    int alpha = INT_MIN;
-    int beta = INT_MAX;
 
+    // Перебираем все пустые клетки на доске
     for (int row = 0; row < BOARD_SIZE; row++) {
         for (int col = 0; col < BOARD_SIZE; col++) {
             if (board[row][col] == 0) {
+                // Проверяем, если текущий ход приведет к победе компьютера
                 board[row][col] = 'O';
-                int score = Minimax(board, 2, alpha, beta, false);
-                board[row][col] = 0;
-                if (score > bestScore) {
-                    bestScore = score;
+                if (CheckWin('O')) {
+                    board[row][col] = 0;  // Отменяем временный ход
                     bestRow = row;
                     bestCol = col;
+                    break;
                 }
+                board[row][col] = 0;  // Отменяем временный ход
+
+                // Проверяем, если текущий ход приведет к победе игрока
+                board[row][col] = 'X';
+                if (CheckWin('X')) {
+                    board[row][col] = 0;  // Отменяем временный ход
+                    bestRow = row;
+                    bestCol = col;
+                    break;
+                }
+                board[row][col] = 0;  // Отменяем временный ход
+
+                // Запоминаем позицию, если она не приведет ни к победе, ни к поражению
+                bestRow = row;
+                bestCol = col;
             }
         }
     }
 
+    // Выполняем ход компьютера
     board[bestRow][bestCol] = 'O';
     SetWindowText(hwndButton[bestRow][bestCol], L"O");
     EnableWindow(hwndButton[bestRow][bestCol], FALSE);
