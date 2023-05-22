@@ -8,86 +8,43 @@ bool againstComputer = true; // Flag indicating the game mode (against computer 
 
 
 bool CheckWin(char player) {
-   
-    // Check for a winning combination for the player
+    // Проверка наличия выигрышной комбинации для указанного игрока
+
+    // Проверка по горизонтали
     for (int row = 0; row < BOARD_SIZE; row++) {
         if (board[row][0] == player && board[row][1] == player && board[row][2] == player && board[row][3] == player && board[row][4] == player)
             return true;
     }
 
+    // Проверка по вертикали
     for (int col = 0; col < BOARD_SIZE; col++) {
         if (board[0][col] == player && board[1][col] == player && board[2][col] == player && board[3][col] == player && board[4][col] == player)
             return true;
     }
 
+    // Проверка по диагонали (слева направо)
     if (board[0][0] == player && board[1][1] == player && board[2][2] == player && board[3][3] == player && board[4][4] == player)
         return true;
 
+    // Проверка по диагонали (справа налево)
     if (board[0][4] == player && board[1][3] == player && board[2][2] == player && board[3][1] == player && board[4][0] == player)
         return true;
 
     return false;
 }
 
+
 bool CheckDraw() {
-    // Check for a draw
+    // Проверка на ничью
+
+    // Проверка на наличие пустых клеток
     for (int row = 0; row < BOARD_SIZE; row++) {
         for (int col = 0; col < BOARD_SIZE; col++) {
             if (board[row][col] == 0)
-                return false; // There is an empty cell, the game continues
+                return false; // Есть пустая клетка, игра продолжается
         }
     }
-    return true; // No empty cells, it's a draw
-}
-
-int Minimax(char board[BOARD_SIZE][BOARD_SIZE], int depth, int alpha, int beta, bool isMaximizing) {
-    if (CheckWin('X'))
-        return -10 + depth;
-
-    if (CheckWin('O'))
-        return 10 - depth;
-
-    if (CheckDraw())
-        return 0;
-
-    if (isMaximizing) {
-        int bestScore = INT_MIN;
-
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                if (board[row][col] == 0) {
-                    board[row][col] = 'O';
-                    int score = Minimax(board, depth + 1, alpha, beta, false);
-                    board[row][col] = 0;
-                    bestScore = max(bestScore, score);
-                    alpha = max(alpha, bestScore);
-                    if (beta <= alpha)
-                        break;
-                }
-            }
-        }
-
-        return bestScore;
-    }
-    else {
-        int bestScore = INT_MAX;
-
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                if (board[row][col] == 0) {
-                    board[row][col] = 'X';
-                    int score = Minimax(board, depth + 1, alpha, beta, true);
-                    board[row][col] = 0;
-                    bestScore = min(bestScore, score);
-                    beta = min(beta, bestScore);
-                    if (beta <= alpha)
-                        break;
-                }
-            }
-        }
-
-        return bestScore;
-    }
+    return true; // Все клетки заполнены, ничья
 }
 
 void MakeComputerMove() {
@@ -312,7 +269,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
-
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     const wchar_t CLASS_NAME[] = L"TicTacToeClass";

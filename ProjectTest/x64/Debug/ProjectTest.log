@@ -1,3 +1,3 @@
 ﻿  SoftwareMain.cpp
-C:\Users\nik85\OneDrive\Документы\GitHub\PalaginProject\ProjectTest\SoftwareMain.cpp(343,15): warning C4244: return: преобразование "WPARAM" в "int", возможна потеря данных
+C:\Users\nik85\OneDrive\Документы\GitHub\PalaginProject\ProjectTest\SoftwareMain.cpp(292,15): warning C4244: return: преобразование "WPARAM" в "int", возможна потеря данных
   ProjectTest.vcxproj -> C:\Users\nik85\OneDrive\Документы\GitHub\PalaginProject\x64\Debug\ProjectTest.exe
