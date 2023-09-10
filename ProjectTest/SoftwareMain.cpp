@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <iostream>
-#define IDC_CHECKBOX 1001 // Уникальный идентификатор для чекбокса
+#define IDC_CHECKBOX 1001 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 const int BOARD_SIZE = 5;
 HWND hwndButton[BOARD_SIZE][BOARD_SIZE];
@@ -11,25 +11,25 @@ bool againstComputer = true; // Flag indicating the game mode (against computer 
 
 
 bool CheckWin(char player) {
-    // Проверка наличия выигрышной комбинации для указанного игрока
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
-    // Проверка по горизонтали
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     for (int row = 0; row < BOARD_SIZE; row++) {
         if (board[row][0] == player && board[row][1] == player && board[row][2] == player && board[row][3] == player && board[row][4] == player)
             return true;
     }
 
-    // Проверка по вертикали
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     for (int col = 0; col < BOARD_SIZE; col++) {
         if (board[0][col] == player && board[1][col] == player && board[2][col] == player && board[3][col] == player && board[4][col] == player)
             return true;
     }
 
-    // Проверка по диагонали (слева направо)
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     if (board[0][0] == player && board[1][1] == player && board[2][2] == player && board[3][3] == player && board[4][4] == player)
         return true;
 
-    // Проверка по диагонали (справа налево)
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
     if (board[0][4] == player && board[1][3] == player && board[2][2] == player && board[3][1] == player && board[4][0] == player)
         return true;
 
@@ -38,16 +38,16 @@ bool CheckWin(char player) {
 
 
 bool CheckDraw() {
-    // Проверка на ничью
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
-    // Проверка на наличие пустых клеток
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     for (int row = 0; row < BOARD_SIZE; row++) {
         for (int col = 0; col < BOARD_SIZE; col++) {
             if (board[row][col] == 0)
-                return false; // Есть пустая клетка, игра продолжается
+                return false; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         }
     }
-    return true; // Все клетки заполнены, ничья
+    return true; // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ
 }
 
 void MakeComputerMove() {
@@ -56,38 +56,38 @@ void MakeComputerMove() {
     int bestRow = -1;
     int bestCol = -1;
 
-    // Перебираем все пустые клетки на доске
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     for (int row = 0; row < BOARD_SIZE; row++) {
         for (int col = 0; col < BOARD_SIZE; col++) {
             if (board[row][col] == 0) {
-                // Проверяем, если текущий ход приведет к победе компьютера
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 board[row][col] = 'O';
                 if (CheckWin('O')) {
-                    board[row][col] = 0;  // Отменяем временный ход
+                    board[row][col] = 0;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
                     bestRow = row;
                     bestCol = col;
                     break;
                 }
-                board[row][col] = 0;  // Отменяем временный ход
+                board[row][col] = 0;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 
-                // Проверяем, если текущий ход приведет к победе игрока
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                 board[row][col] = 'X';
                 if (CheckWin('X')) {
-                    board[row][col] = 0;  // Отменяем временный ход
+                    board[row][col] = 0;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
                     bestRow = row;
                     bestCol = col;
                     break;
                 }
-                board[row][col] = 0;  // Отменяем временный ход
+                board[row][col] = 0;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 
-                // Запоминаем позицию, если она не приведет ни к победе, ни к поражению
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 bestRow = row;
                 bestCol = col;
             }
         }
     }
 
-    // Выполняем ход компьютера
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     board[bestRow][bestCol] = 'O';
     SetWindowText(hwndButton[bestRow][bestCol], L"O");
     EnableWindow(hwndButton[bestRow][bestCol], FALSE);
@@ -134,10 +134,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
         hwndCheckbox = CreateWindow(L"BUTTON", L"Against Computer",
             WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX,
-            0, -10, buttonWidth * BOARD_SIZE, 30, // Позиция и размер чекбокса
+            0, -10, buttonWidth * BOARD_SIZE, 30, // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             hwnd, reinterpret_cast<HMENU>(IDC_CHECKBOX), hInstance, nullptr);
 
-        // Установите начальное состояние чекбокса в зависимости от значения againstComputer
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ againstComputer
         SendMessage(hwndCheckbox, BM_SETCHECK, againstComputer ? BST_CHECKED : BST_UNCHECKED, 0);
 
         return 0;
@@ -146,14 +146,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         // Handle button events
         int buttonId = LOWORD(wParam);
-        int controlId = LOWORD(wParam); // Получаем идентификатор элемента управления
-        int notificationCode = HIWORD(wParam); // Получаем код уведомления
+        int controlId = LOWORD(wParam); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        int notificationCode = HIWORD(wParam); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         int row = -1, col = -1;
 
         if (controlId == IDC_CHECKBOX && notificationCode == BN_CLICKED) {
-            // Обработка клика на чекбоксе
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             int checked = SendMessage(hwndCheckbox, BM_GETCHECK, 0, 0);
             againstComputer = (checked == BST_CHECKED);
+            ResetGame();
         }
 
                 for (int i = 0; i < BOARD_SIZE; i++) {
