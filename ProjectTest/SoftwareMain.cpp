@@ -133,7 +133,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         }
 
         hwndCheckbox = CreateWindow(L"BUTTON", L"Against Computer",
-            WS_CHILD | WS_VISIBLE | BS_CHECKBOX,
+            WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX,
             0, -10, buttonWidth * BOARD_SIZE, 30, // Позиция и размер чекбокса
             hwnd, reinterpret_cast<HMENU>(IDC_CHECKBOX), hInstance, nullptr);
 
@@ -146,15 +146,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         // Handle button events
         int buttonId = LOWORD(wParam);
-        int notification = HIWORD(wParam);
+        int controlId = LOWORD(wParam); // Получаем идентификатор элемента управления
+        int notificationCode = HIWORD(wParam); // Получаем код уведомления
         int row = -1, col = -1;
 
-            if (buttonId == IDC_CHECKBOX && reinterpret_cast<HWND>(lParam) == hwndCheckbox) {
-                int checked = SendMessage(hwndCheckbox, BM_GETCHECK, 0, 0);
-                againstComputer = (checked == BST_CHECKED);
-                InvalidateRect(hwndCheckbox, NULL, TRUE);
-            }
-            else {
+        if (controlId == IDC_CHECKBOX && notificationCode == BN_CLICKED) {
+            // Обработка клика на чекбоксе
+            int checked = SendMessage(hwndCheckbox, BM_GETCHECK, 0, 0);
+            againstComputer = (checked == BST_CHECKED);
+        }
+
                 for (int i = 0; i < BOARD_SIZE; i++) {
                     for (int j = 0; j < BOARD_SIZE; j++) {
                         if (hwndButton[i][j] == reinterpret_cast<HWND>(lParam)) {
@@ -208,11 +209,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                         playerTurn = !playerTurn;
                     }
                 }
-            }
-
-
-        
-
         return 0;
     }
     case WM_SIZE:
