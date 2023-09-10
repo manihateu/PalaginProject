@@ -1,7 +1,10 @@
 #include <windows.h>
+#include <iostream>
+#define IDC_CHECKBOX 1001 // Уникальный идентификатор для чекбокса
 
 const int BOARD_SIZE = 5;
 HWND hwndButton[BOARD_SIZE][BOARD_SIZE];
+HWND hwndCheckbox;
 char board[BOARD_SIZE][BOARD_SIZE] = { 0 };
 bool playerTurn = true; // Flag indicating player's turn
 bool againstComputer = true; // Flag indicating the game mode (against computer or player)
@@ -119,7 +122,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 hwndButton[row][col] = CreateWindow(L"BUTTON", L"",
                     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-                    x, y, buttonWidth, buttonHeight,
+                    x, y+50, buttonWidth, buttonHeight,
                     hwnd, nullptr, hInstance, nullptr);
 
                 x += buttonWidth + spacing;
@@ -129,69 +132,86 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             y += buttonHeight + spacing;
         }
 
+        hwndCheckbox = CreateWindow(L"BUTTON", L"Against Computer",
+            WS_CHILD | WS_VISIBLE | BS_CHECKBOX,
+            0, -10, buttonWidth * BOARD_SIZE, 30, // Позиция и размер чекбокса
+            hwnd, reinterpret_cast<HMENU>(IDC_CHECKBOX), hInstance, nullptr);
+
+        // Установите начальное состояние чекбокса в зависимости от значения againstComputer
+        SendMessage(hwndCheckbox, BM_SETCHECK, againstComputer ? BST_CHECKED : BST_UNCHECKED, 0);
+
         return 0;
     }
     case WM_COMMAND:
     {
         // Handle button events
         int buttonId = LOWORD(wParam);
-
+        int notification = HIWORD(wParam);
         int row = -1, col = -1;
 
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (hwndButton[i][j] == reinterpret_cast<HWND>(lParam)) {
-                    row = i;
-                    col = j;
-                    break;
+            if (buttonId == IDC_CHECKBOX && reinterpret_cast<HWND>(lParam) == hwndCheckbox) {
+                int checked = SendMessage(hwndCheckbox, BM_GETCHECK, 0, 0);
+                againstComputer = (checked == BST_CHECKED);
+                InvalidateRect(hwndCheckbox, NULL, TRUE);
+            }
+            else {
+                for (int i = 0; i < BOARD_SIZE; i++) {
+                    for (int j = 0; j < BOARD_SIZE; j++) {
+                        if (hwndButton[i][j] == reinterpret_cast<HWND>(lParam)) {
+                            row = i;
+                            col = j;
+                            break;
+                        }
+                    }
+                }
+                if (row != -1 && col != -1 && board[row][col] == 0) {
+                    if (playerTurn) {
+                        // Handle player's move
+                        board[row][col] = 'X';
+                        SetWindowText(hwndButton[row][col], L"X");
+                        EnableWindow(hwndButton[row][col], FALSE);
+                    }
+                    else if (!playerTurn && !againstComputer) {
+                        // Handle second player's move
+                        board[row][col] = 'O';
+                        SetWindowText(hwndButton[row][col], L"O");
+                        EnableWindow(hwndButton[row][col], FALSE);
+                    }
+                    // Check for a win
+                    if (CheckWin('X')) {
+                        MessageBox(hwnd, L"Player X wins!", L"Victory", MB_OK);
+                        ResetGame();
+                        return 0;
+                    }
+                    else if (CheckDraw()) {
+                        MessageBox(hwnd, L"It's a draw!", L"Result", MB_OK);
+                        ResetGame();
+                        return 0;
+                    }
+
+                    playerTurn = !playerTurn;
+
+                    if (againstComputer && !playerTurn) {
+                        // Computer's move
+                        MakeComputerMove();
+                        // Check for a win
+                        if (CheckWin('O')) {
+                            MessageBox(hwnd, L"Computer O wins!", L"Victory", MB_OK);
+                            ResetGame();
+                            return 0;
+                        }
+                        else if (CheckDraw()) {
+                            MessageBox(hwnd, L"It's a draw!", L"Result", MB_OK);
+                            ResetGame();
+                            return 0;
+                        }
+                        playerTurn = !playerTurn;
+                    }
                 }
             }
-        }
 
-        if (row != -1 && col != -1 && board[row][col] == 0) {
-            if (playerTurn) {
-                // Handle player's move
-                board[row][col] = 'X';
-                SetWindowText(hwndButton[row][col], L"X");
-                EnableWindow(hwndButton[row][col], FALSE);
-            }
-            else if (!playerTurn && !againstComputer) {
-                // Handle second player's move
-                board[row][col] = 'O';
-                SetWindowText(hwndButton[row][col], L"O");
-                EnableWindow(hwndButton[row][col], FALSE);
-            }
-            // Check for a win
-            if (CheckWin('X')) {
-                MessageBox(hwnd, L"Player X wins!", L"Victory", MB_OK);
-                ResetGame();
-                return 0;
-            }
-            else if (CheckDraw()) {
-                MessageBox(hwnd, L"It's a draw!", L"Result", MB_OK);
-                ResetGame();
-                return 0;
-            }
 
-            playerTurn = !playerTurn;
-
-            if (againstComputer && !playerTurn) {
-                // Computer's move
-                MakeComputerMove();
-                // Check for a win
-                if (CheckWin('O')) {
-                    MessageBox(hwnd, L"Computer O wins!", L"Victory", MB_OK);
-                    ResetGame();
-                    return 0;
-                }
-                else if (CheckDraw()) {
-                    MessageBox(hwnd, L"It's a draw!", L"Result", MB_OK);
-                    ResetGame();
-                    return 0;
-                }
-                playerTurn = !playerTurn;
-            }
-        }
+        
 
         return 0;
     }
