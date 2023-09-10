@@ -185,6 +185,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                         ResetGame();
                         return 0;
                     }
+                    if (!againstComputer) {
+                        if (CheckWin('O')) {
+                            MessageBox(hwnd, L"Computer O wins!", L"Victory", MB_OK);
+                            ResetGame();
+                            return 0;
+                        }
+                    }
                     else if (CheckDraw()) {
                         MessageBox(hwnd, L"It's a draw!", L"Result", MB_OK);
                         ResetGame();
